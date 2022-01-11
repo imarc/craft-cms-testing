@@ -1,0 +1,7 @@
+{
+    "baseUrl": "https://test.imarc.io",
+    "env": {
+        "LOGIN_PATH": "/account/login",
+        "LOGOUT_PATH": "/account/logout"
+    }
+}

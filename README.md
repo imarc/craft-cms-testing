@@ -1,6 +1,6 @@
 # Craft Site Testing with Codeception and Cypress
 
-This document describes the process for adding Codeception and Cypress testing for an existing site on Craft CMS (Craft ^3.2).
+This document describes the process for adding Codeception and Cypress testing for an existing site on Craft CMS (Craft added support for Codeception testing beginning with v3.2). The repository contains example tests copied from *asc-es.com* in the **/tests** and **/cypress** folders as well as some example configuraton files. 
 
 ## Craft/Codeception 
 

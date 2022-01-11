@@ -1,0 +1,4 @@
+/cypress/screenshots
+/cypress/videos
+/tests/_craft/storage
+/tests/_output
