@@ -123,6 +123,8 @@ The install will create a /cypress folder structure. You save your test files in
 
     cp -r cypress/integration/ cypress/examples
     rm -r cypress/integration/*
+    
+*(LINNEA: Cypress doesn't create these files until you run it for the first time.)*
 
 You can set testing global and environment variables in the `cypress.json` file. Example:
     
