@@ -23,6 +23,8 @@ module.exports = (on, config) => {
   // `config` is the resolved Cypress config
 
   // copy any needed variables from process.env to config.env
+  config.baseUrl = process.env.DEFAULT_SITE_URL
+  
   config.env.CYPRESS_LOGIN_NAME = process.env.CYPRESS_LOGIN_NAME
   config.env.CYPRESS_LOGIN_PASSWORD = process.env.CYPRESS_LOGIN_PASSWORD
 

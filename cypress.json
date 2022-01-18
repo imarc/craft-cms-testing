@@ -1,5 +1,5 @@
 {
-    "baseUrl": "https://test.imarc.io",
+    "requestTimeout":6000,
     "env": {
         "LOGIN_PATH": "/account/login",
         "LOGOUT_PATH": "/account/logout"
