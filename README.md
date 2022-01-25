@@ -167,17 +167,17 @@ You can set testing global and environment variables in the `cypress.json` file.
      */
     // eslint-disable-next-line no-unused-vars
     module.exports = (on, config) => {
-      // `on` is used to hook into various events Cypress emits
-      // `config` is the resolved Cypress config
+        // `on` is used to hook into various events Cypress emits
+        // `config` is the resolved Cypress config
 
-      // copy any needed variables from process.env to config.env
-      config.baseUrl = process.env.DEFAULT_SITE_URL
+        // copy any needed variables from process.env to config.env
+        config.baseUrl = process.env.DEFAULT_SITE_URL
 
-      config.env.CYPRESS_LOGIN_NAME = process.env.CYPRESS_LOGIN_NAME
-      config.env.CYPRESS_LOGIN_PASSWORD = process.env.CYPRESS_LOGIN_PASSWORD
+        config.env.CYPRESS_LOGIN_NAME = process.env.CYPRESS_LOGIN_NAME
+        config.env.CYPRESS_LOGIN_PASSWORD = process.env.CYPRESS_LOGIN_PASSWORD
 
-      // do not forget to return the changed config object!
-      return config
+        // do not forget to return the changed config object!
+        return config
     } 
 
 When you run tests Cypress will create folders for screenshots and videos. Add the following to your .gitignore file.
@@ -256,7 +256,27 @@ You can run tests on Buddy as part of the deployment to process.
 
 #### Running Cypress tests on Buddy deployment
 
-1. Add the environment variables you configured in `/cypress/plugins/index.js` to the Buddy project or pipeline
+1. Add the environment variables you configured in `/cypress/plugins/index.js` to the Buddy project or pipeline. In the example configuration above we configured *DEFAULT_SITE_URL*, *CYPRESS_LOGIN_NAME*, and *CYPRESS_LOGIN_PASSWORD*.     
+
+    Define project variables that are the same for all pipelines
+
+        CYPRESS_LOGIN_NAME  test@imarc.com  (settable, plain text)
+        CYPRESS_LOGIN_PASSWORD  "***********" (settable, encrypted)
+
+    Define pipeline specific variables. If the pipeline you wish to test has **basic authentication enabled** you'll need to configure the URL for the pipeline to contain the auth credentials. We recommend using a specific variable with a CYPRESS_ prefix for this. 
+
+    The format for passing basic authentication credentials as part of the base url is **http://username:password@domain**
+
+        CYPRESS_SITE_URL https://username:password@dev.yourdomain.com (settable, plain text)
+
+    Modify the plugin file that sets environment variables to work on buddy or locally
+
+            // /cypress/plugins/index.js
+
+            ...
+            config.baseUrl = process.env.CYPRESS_SITE_URL ? process.env.CYPRESS_SITE_URL : process.env.DEFAULT_SITE_URL
+            ...
+
 2. Add a Cypress action to the Buddy deployment pipeline(s) you want to test. We recommend testing on UAT and DEV.
 
         npm install
