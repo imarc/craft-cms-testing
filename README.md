@@ -2,6 +2,8 @@
 
 This document describes the process for adding Codeception and Cypress testing for an existing site on Craft CMS (Craft added support for Codeception testing beginning with v3.2). The repository contains example tests copied from *asc-es.com* in the **/tests** and **/cypress** folders as well as some example configuraton files. 
 
+**This project is a work in progress. We will continue updating it as our experience and best practices evolve.**
+
 ## Craft/Codeception 
 
 [Codeception](https://codeception.com/) extends [PHP Unit](https://phpunit.readthedocs.io/en/9.5/index.html) testing. It supports 3 types of tests. 
