@@ -254,7 +254,7 @@ There are several options for doing continuous integration.
 
 ### Buddy
 
-You can run tests on Buddy as part of the deployment to process.
+You can run tests on Buddy as part of a continuous deployment process.
 
 #### Running Cypress tests on Buddy deployment
 
