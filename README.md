@@ -61,6 +61,21 @@ If your site uses project config don't copy the **config/project folder** to **t
     projectConfig: {folder: '/config/project'}
     reset: true
 
+#### Fixtures
+
+When running tests without a database you'll probably need to include some fixture files for populating data. Add a **tests/fixtures** folder and a **tests/fixtures/data** subfolder. Your fixture file gets added to the fixtures folder and it's corresponding data file gets added in the subfolder.
+
+Relavent documentation can be found here: https://craftcms.com/docs/4.x/testing/testing-craft/fixtures.html
+
+Be sure to add the namespace to the autoload in your `composer.json` file, then run `composer dumpautoload` to add your new fixture to the class map. The documentation overlooks this fact but most of the tests subfolders get parsed by composer when running autoload, but this folder does not unless you specifically add it to the class map.
+
+    "autoload": {
+        "psr-4": {
+            "modules\\": "modules/",
+            "tests\\fixtures\\": "tests/fixtures"
+        }
+    }
+
 #### Database
 
 The `./craft tests/setup` command adds configuration to set up an empty Craft database by default. This will generate a clean Craft install with none of your site content when it initiates testing. This is valuable if your site uses project config and you plan to mock all of the site data to test tools. 
