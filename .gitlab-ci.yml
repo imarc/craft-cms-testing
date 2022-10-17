@@ -1,0 +1,131 @@
+# Select image from https://hub.docker.com/_/php/
+image: cimg/php:8.0
+
+variables:
+  MARIADB_DATABASE: $MYSQL_DB
+  MARIADB_ROOT_PASSWORD: $MYSQL_PASS
+
+services:
+  - mariadb:latest
+  - redis:latest
+
+# Select what we should cache
+cache:
+  paths:
+  - vendor/
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script: 
+    - echo "Building Environment\n"
+    - cp tests/.env.gitlab tests/.env
+
+    # Install curl, the php image doesn't have installed
+    # Required sudo command when running on image: cimg/x.x
+    - sudo apt-get update -yqq
+    - sudo apt-get install curl -yqq
+
+    # Install php extensions
+    # - apt-get install -y zlib1g-dev
+    # - apt-get update && apt-get install -y libzip-dev
+    # - apt-get install -y libpng-dev
+    # - apt-get -y install php8.0-mysql
+    # - docker-php-ext-install pdo pdo_mysql && docker-php-ext-enable pdo_mysql
+    # - docker-php-ext-install zip
+    # - docker-php-ext-install gd
+
+    # Install dependencies with Composer
+    - composer install
+    # - curl -sS https://getcomposer.org/installer | php
+    # - php composer.phar install
+  artifacts:
+    paths:
+      - vendor/
+      - tests/.env
+
+test:
+  stage: test
+  script:
+    - echo "Executing Codeception Tests\n"
+    - vendor/bin/codecept run -d
+    
+# For reference - copied from https://gitlab.imarc.net/sites/galen-gateway-rebuild/-/blob/master/.gitlab-ci.yml
+# variables:
+#   GIT_SSL_NO_VERIFY: "true"
+#   MARIADB_DATABASE: $MYSQL_DB
+#   MARIADB_ROOT_PASSWORD: $MYSQL_PASS
+#   npm_config_cache: '$CI_PROJECT_DIR/.npm'
+#   CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/cache/Cypress'
+
+# cache:
+#   key: ${CI_COMMIT_REF_SLUG}
+#   paths:
+#     - .cache/*
+#     - cache/Cypress
+#     - node_modules
+#     - build
+
+# image: cimg/php:8.1
+
+# services:
+#   - mariadb:latest
+
+# stages:
+#   - build
+#   - test
+
+# build:
+#   stage: build
+#   script:
+#     - sudo apt update
+#     - sudo apt install -y ca-certificates
+#     - sudo apt install -y --no-install-recommends nodejs npm
+#     - sudo npm install -g n
+#     - sudo n 16
+#     - cp .env.ci .env
+#     - cp .env.ci .env.cypress
+#     - cp cypress.json.ci cypress.json
+#     - cp phpunit.xml.testing phpunit.xml
+#     - composer install --ignore-platform-reqs
+#     - php artisan key:generate
+#     - npm install
+#     - npm run build
+#   artifacts:
+#     paths:
+#       - vendor/
+#       - .env
+#       - .env.cypress
+#       - cypress.json
+#       - phpunit.xml
+#       - node_modules/
+#       - public/js/
+#       - public/css/
+#       - public/mix-manifest.json
+#       - public/_nuxt
+#       - cypress/videos/**/*.mp4
+#       - cypress/screenshots/**/*.png
+
+# cypress:
+#   stage: test
+#   script:
+#     - sudo apt update
+#     - sudo apt install -y nodejs npm libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+#     - sudo npm install -g n
+#     - sudo n 16
+#     - php artisan serve --port=80 --host=0.0.0.0 &
+#     - ./node_modules/.bin/cypress install
+#     - npm run e2e
+
+# phpunit:
+#   stage: test
+#   script:
+#     - vendor/bin/phpunit
+
+# psalm:
+#   stage: test
+#   script:
+#     - ./vendor/bin/psalm --no-cache -c psalm.xml

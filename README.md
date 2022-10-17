@@ -138,10 +138,10 @@ Cypress uses software that's installed on your computer and an NPM package to ex
 
 - [Instructions](https://docs.cypress.io/guides/getting-started/installing-cypress)
 
-The install will create a /cypress folder structure. You save your test files in the `cypress/integration` folder. The install loads the folder with numerous example files which can be a valuable reference for writing your own tests. If you wish to keep them it's best to move them to a separate examples folder to avoid running them with your own site tests.
+The install will create a /cypress folder structure. You save your test files in the `cypress/e2e` folder on Cypress v10 and `cypress/integration` folder in older versions. The install loads the folder with numerous example files which can be a valuable reference for writing your own tests. If you wish to keep them it's best to move them to a separate examples folder to avoid running them with your own site tests.
 
-    cp -r cypress/integration/ cypress/examples
-    rm -r cypress/integration/*
+    cp -r cypress/e2e/ cypress/examples
+    rm -r cypress/e2e/*
     
 *(LINNEA: Cypress doesn't create these files until you run it for the first time.)*
 
@@ -156,7 +156,7 @@ You can set testing global and environment variables in the `cypress.json` file.
         }
     }
 
-    // /cypress/integration/your-test.js
+    // /cypress/e2e/your-test.js
     describe('My Test', () => {
         it('Test Homepage', () => {
             cy.visit('/')
@@ -210,9 +210,11 @@ Now you can open Cypress from your project root one of the following ways:
 
     $(npm bin)/cypress open
 
-Use the *cypress run* command to run all of the tests in the **cypress/integration** folder
+Use the *cypress run* command to run all of the tests in the **cypress/e2e** folder, or use the `-s --spec` flags to specify a specific test file
 
     $(npm bin)/cypress run
+
+    $(npm bin)/cypress run -s cypress/e2e/my-test.cy.js
 
 #### Testing Logged In User State
 
@@ -238,7 +240,7 @@ If you followed the configuration instructions above to set your testing login n
 
 You can now reference the `cy.login` function from your tests and call it from anywhere you need it. **Remember to enable the `experimentalSessionSupport` flag** in your test file.
     
-    // /cypess/integration/your-test-file.js
+    // /cypess/e2e/your-test-file.js
 
     Cypress.config('experimentalSessionSupport', true)
 
@@ -294,11 +296,13 @@ You can run tests on Buddy as part of a continuous deployment process.
             config.baseUrl = process.env.CYPRESS_SITE_URL ? process.env.CYPRESS_SITE_URL : process.env.DEFAULT_SITE_URL
             ...
 
-2. Add a Cypress action to the Buddy deployment pipeline(s) you want to test. We recommend testing on UAT and DEV.
+2. Add a Cypress action to the Buddy deployment pipeline(s) you want to test. By default this will create a node environment using cypress/base @latest. If the project deployment environment specifies a fixed version, this step should be configured to use the same version as the regular deployment. By default, this will also be configured to use a cache rather than doing a clean install. The cache setting should also match the regular deployment environment.
+
+We recommend setting up a testing step on UAT and DEV.
 
         npm install
         npm install cypress
-        ./node_modules/.bin/cypress run 
+        $(npm bin)/cypress run 
 
 
 ### Gitlab Pipeline
